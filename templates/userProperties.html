@@ -1,0 +1,105 @@
+{% extends 'userHome.html' %} {% block content %}
+
+  <!-- Portfolio Section -->
+  <section id="portfolio" class="portfolio section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Available Stay's</h2>
+        <p>Explore available home stays and resorts. View details and book your perfect stay effortlessly.</p>
+
+    </div><!-- End Section Title -->
+
+    <div class="container">
+
+      <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+
+        
+
+        <form method="POST" class="d-flex justify-content-center my-4">
+            {% csrf_token %}
+            <div class="input-group" style="max-width: 600px;">
+                <input type="text" class="form-control" placeholder="Search Places" name="txtSearch" aria-label="Search song">
+                <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Search</button>
+            </div>
+        </form>
+
+
+
+
+        <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+            {% for i in data %}
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+            <div class="portfolio-content h-100">
+              <a href="static/media/{{ i.image }}" data-gallery="portfolio-gallery-app" class="glightbox"><img src="static/media/{{ i.image }}" class="img-fluid" alt=""></a>
+              <div class="portfolio-info">
+                <h4 ><a title="More Details" class="fw-bold text-primary">{{ i.name }}</a></h4>
+                <p class="text-muted mb-1"><strong>Manager:</strong> {{ i.user.name }}</p>
+                <p class="text-muted mb-1"><strong>Email:</strong> {{ i.email }}</p>
+                <p class="text-muted mb-1"><strong>Phone:</strong> {{ i.phone }}</p>
+                <p class="text-muted mb-1"><strong>District:</strong> {{ i.district }}</p>
+                <p class="text-muted mb-1"><strong>Village:</strong> {{ i.village }}</p>
+                <p class="text-muted"><strong>Address:</strong> {{ i.address }}</p> <br>
+                
+                    {% if i.status == "Available" and i.rate is not Null %}
+                    <p class="text-muted"><strong style="color: green;">Rate: {{ i.rate }} Rs/Day</strong> </p> <br>
+
+
+                    <form action="/userBook" method="post" class="d-flex flex-column align-items-center my-4">
+                      {% csrf_token %}
+                      <div class="input-group mb-3" style="max-width: 600px;">
+                        <span class="input-group-text fw-bold">From</span>
+                        <input type="date" class="form-control" name="from" id="txtDate{{i.id}}" onclick='checkdate("txtDate{{i.id}}")' required>
+                      </div>
+                    
+                      <div class="input-group mb-3" style="max-width: 600px;">
+                        <span class="input-group-text fw-bold">To</span>
+                        <input type="date" class="form-control" name="to" id="txtDate" onchange="checkdate()" required>
+                      </div>
+                    
+                      <input type="text" class="form-control" name="id" value="{{ i.id }}" hidden>
+                    
+                      <div class="mt-3 text-center">
+                        <button class="btn btn-success">Send Booking Request</button>
+                      </div>
+                    </form>
+                    
+                  
+
+
+                    
+                    {% else %}
+                <center>
+                <h6><b style="color: red;">{{ i.status }}</b></h6>
+                </center>
+                {% endif %}
+              </div>
+                
+            </div>
+          </div><!-- End Portfolio Item -->
+          {% endfor %}
+
+         
+
+          
+
+        </div><!-- End Portfolio Container -->
+
+      </div>
+
+    </div>
+
+  </section><!-- /Portfolio Section -->
+
+<script>
+  // Get the current date
+  function checkdate(id){
+
+    var today = new Date().toISOString().split('T')[0];
+    
+    // Set the min attribute of the date input field
+    document.getElementById(id).setAttribute('min', today);
+  }
+</script>
+{% endblock %}
+

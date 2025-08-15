@@ -1,0 +1,60 @@
+{% extends 'manHome.html' %} {% block content %}
+
+  <!-- Portfolio Section -->
+  <section id="portfolio" class="portfolio section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Bookings</h2>
+        <p>View and manage confirmed bookings for your home stays and resorts. Track guest details, monitor check-ins, and ensure a smooth stay experience.</p>
+
+
+    </div><!-- End Section Title -->
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="notificationTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>BOOKING DATE</th>
+                        <th>CUSTOMER</th>
+                        <th>EMAIL</th>
+                        <th>PHONE</th>
+                        <th>STAY</th>
+                        <th>FROM DATE</th>
+                        <th>TO DATE</th>
+                        <th>TOTAL</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="notificationContainer">
+                    {% for i in data %}
+                    <tr>
+                        <td>{{ i.date }}</td>
+                        <td>{{ i.user.name }}</td>
+                        <td>{{ i.user.email }}</td>
+                        <td>{{ i.user.phone }}</td>
+                        <td>{{ i.stay.name }}</td>
+                        <td>{{ i.from_date }}</td>
+                        <td>{{ i.to_date }}</td>
+                        <td>{{ i.total }}</td>
+                        <td>{% if i.status == "Booked" %}
+                            {{ i.status }} <br>
+                            <a href="/manComplete?id={{ i.id }}&status=Completed" class="btn btn-success">Mark Completed</a>
+                            {% else %}
+                            {{ i.status}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">No Bookings Request!</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+  </section><!-- /Portfolio Section -->
+
+{% endblock %}

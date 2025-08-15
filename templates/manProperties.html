@@ -1,0 +1,160 @@
+{% extends 'manHome.html' %} {% block content %}
+
+
+
+
+<!-- Contact Section -->
+<section id="contact" class="contact section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Add Your Property Details</h2>  
+        <p>List your home stay or resort and provide guests with a memorable experience. Add your property details now!</p>
+
+        
+        
+    </div><!-- End Section Title -->
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+      <div class="row gy-4">
+
+        
+        <center>
+            <div class="col-lg-12">
+                <form action="" method="post" class="p-4 border rounded shadow" data-aos="fade-up" data-aos-delay="200" enctype="multipart/form-data">
+                    {% csrf_token%}
+                  <div class="row gy-4">
+              
+                    <div class="col-md-6">
+                      <label for="name-field" class="form-label d-block text-start">Property Name</label>
+                      <input type="text" pattern="[A-Za-z\s]{1,}" class="form-control" name="name" id="name-field" placeholder="Enter your property's name" required>
+                    </div>
+              
+                    <div class="col-md-6">
+                      <label for="phone-field" class="form-label d-block text-start">Phone Number</label>
+                      <input type="tel" pattern="[6789][0-9]{9}" maxlength="10" class="form-control" name="phone" id="phone-field" value="{{ phone }}" required>
+                    </div>
+              
+                    <div class="col-md-6">
+                      <label for="email-field" class="form-label d-block text-start">Email Address</label>
+                      <input type="email" class="form-control" name="email" id="email-field" value="{{ email }}" required>
+                    </div>
+              
+                    <div class="col-md-6">
+                      <label for="email-field" class="form-label d-block text-start">Add Image</label>
+                      <input type="file" class="form-control" name="image" id="email-field" value="" required>
+                    </div>
+              
+                    
+
+                    <div class="col-md-6">
+                        <label for="name-field" class="form-label d-block text-start">District</label>
+                        <input type="text"  class="form-control" name="district" id="name-field" value="{{ district }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="name-field" class="form-label d-block text-start">Village</label>
+                        <input type="text"  class="form-control" name="village" id="name-field" value="{{ village }}" required>
+                    </div>
+
+                    <div class="col-md-12">
+                      <label for="address-field" class="form-label d-block text-start">Address</label>
+                      <textarea class="form-control" name="address" rows="4" id="address-field" required  style="color: #444;">{{ address }}</textarea>
+                    </div>
+              
+                    <div class="col-md-12 text-center">
+                      <button type="submit" class="btn btn-primary px-4 py-2">Register</button>
+                    </div>
+              
+                  </div>
+                </form>
+              </div>
+              
+              
+              
+        </center>
+        
+
+      </div>
+
+    </div>
+
+  </section><!-- /Contact Section -->
+
+
+  <!-- Portfolio Section -->
+  <section id="portfolio" class="portfolio section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+      <h2>Your Properties</h2>
+      <p>Manage and update your listed home stays and resorts. View details, track bookings, and enhance guest experiences.</p>
+
+
+
+    </div><!-- End Section Title -->
+
+    <div class="container">
+
+      <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+
+        
+
+        <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+            {% for i in data %}
+          <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+            <div class="portfolio-content h-100">
+              <a href="static/media/{{ i.image }}" data-gallery="portfolio-gallery-app" class="glightbox"><img src="static/media/{{ i.image }}" class="img-fluid" alt=""></a>
+              <div class="portfolio-info">
+                <h4><a href="" title="More Details">{{ i.name }}</a></h4>
+                <p class="text-muted mb-1"><strong>Email:</strong> {{ i.email }}</p>
+                <p class="text-muted mb-1"><strong>Phone:</strong> {{ i.phone }}</p>
+                <p class="text-muted mb-1"><strong>District:</strong> {{ i.district }}</p>
+                <p class="text-muted mb-1"><strong>Village:</strong> {{ i.village }}</p>
+                <p class="text-muted"><strong>Address:</strong> {{ i.address }}</p> <br>
+                {% if i.rate is not Null %}
+                <p class="text-muted" style="color: green;" ><strong style="color: green;">Rate: {{ i.rate }} Rs/Day</strong> </p>
+                {% else %}
+                <strong>Rate Not Added</strong>
+                {% endif %}
+                 <br>
+
+                <form action="/manAddAmount" method="post">
+                  {% csrf_token %}
+                  <label for=""><b>Add Amount :</b></label>
+                  <input type="number" name="rate" id="" class="form-control" min="0">
+                  <input type="text" name="id" id="" value="{{ i.id }}" hidden> <br>
+                  <button class="btn btn-success">Submit</button>
+                </form>
+
+                <br>
+                <center>
+                  {% if i.status == "Available" %}
+                <a href="/propertyAvailable?id={{ i.id }}&status=Unavailable" class="btn btn-danger">Mark as Unavailable</a>
+                {% else %}
+                <a href="/propertyAvailable?id={{ i.id }}&status=Available" class="btn btn-success">Mark as Available</a>
+                {% endif %}
+                </center>
+              </div>
+            </div>
+          </div><!-- End Portfolio Item -->
+          {% endfor %}
+
+         
+
+          
+
+        </div><!-- End Portfolio Container -->
+
+      </div>
+
+    </div>
+
+  </section><!-- /Portfolio Section -->
+
+
+
+
+
+{% endblock %}

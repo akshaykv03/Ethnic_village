@@ -1,0 +1,64 @@
+{% extends 'userHome.html' %} {% block content %}
+
+  <!-- Portfolio Section -->
+  <section id="portfolio" class="portfolio section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Your Bookings</h2>
+        <p>View and manage your confirmed bookings for home stays and resorts. Check details, track status, and get ready for your stay.</p>
+
+
+
+    </div><!-- End Section Title -->
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="notificationTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>BOOKING DATE</th>
+                        <th>STAY</th>
+                        <th>MANAGER</th>
+                        <th>EMAIL</th>
+                        <th>PHONE</th>
+                        <th>FROM DATE</th>
+                        <th>TO DATE</th>
+                        <th>TOTAL</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="notificationContainer">
+                    {% for i in data %}
+                    <tr>
+                        <td>{{ i.date }}</td>
+                        <td>{{ i.stay.name }}</td>
+                        <td>{{ i.stay.user.name }}</td>
+                        <td>{{ i.stay.email }}</td>
+                        <td>{{ i.stay.phone }}</td>
+                        <td>{{ i.from_date }}</td>
+                        <td>{{ i.to_date }}</td>
+                        <td>{{ i.total }}</td>
+                        <td>
+                            {% if i.status == "Accepted" %}
+                            {{ i.status }} <br>
+                            <a href="/userPay?id={{ i.id}}" class="btn btn-success">Pay & Book</a>
+                            {% elif i.status == "Completed" %}
+                            <a href="/userFeedback?id={{ i.id }}" class="btn btn-primary">Add Feedback</a>
+                            {% else %}
+                            {{ i.status }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">No Bookings.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+  </section><!-- /Portfolio Section -->
+
+{% endblock %}
